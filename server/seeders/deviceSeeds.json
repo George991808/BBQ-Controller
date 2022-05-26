@@ -1,0 +1,7 @@
+{
+  "name": "mydevice1",
+
+  "setPoint": 120,
+  "output": 37,
+  "controlMode": "Auto"
+}

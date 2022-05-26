@@ -1,0 +1,32 @@
+[
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T11:50:49.386Z"
+  },
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T12:50:49.386Z"
+  },
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T13:50:49.386Z"
+  },
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T14:50:49.386Z"
+  },
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T15:50:49.386Z"
+  },
+  {
+    "name": "TEMPERATURE_TARGET",
+    "value": 120,
+    "timestamp": "2022-02-26T16:50:49.386Z"
+  }
+]
