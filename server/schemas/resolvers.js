@@ -25,10 +25,10 @@ const resolvers = {
   Date: dateScalar,
   Query: {
     users: async (parent, args, context) => {
-      if (context.user) {
-        return User.find();
-      }
-      throw new AuthenticationError("You need to be logged in!");
+      //if (context.user) {
+      return User.find();
+      //  }
+      //  throw new AuthenticationError("You need to be logged in!");
     },
 
     user: async (parent, { userId }) => {
@@ -53,18 +53,18 @@ const resolvers = {
   Mutation: {
     addUser: async (parent, { name, email, password }) => {
       const user = await User.create({ name, email, password });
-      const token = signToken(profile);
+      const token = signToken(user);
 
-      return { token, profile };
+      return { token, user };
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError("No profile with this email found!");
+        throw new AuthenticationError("No user with this email found!");
       }
 
-      const correctPw = await profile.isCorrectPassword(password);
+      const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
         throw new AuthenticationError("Incorrect password!");
