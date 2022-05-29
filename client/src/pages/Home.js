@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useQuery } from "@apollo/client";
 
 import {
@@ -64,19 +64,32 @@ const Home = () => {
   const { loading, data } = useQuery(QUERY_FIRST_DEVICE);
   const firstDevice = data?.firstDevice || [];
   let time = 0;
-  let temperature = 0;
-  console.log("ASD", firstDevice);
+  let temperature = 25;
+  //console.log("ASD", firstDevice);
+  const [target, setTarget] = useState(120);
+  const [vent, setVent] = useState(0);
   const [datatrend, setGamePlayTime] = useState([]);
+  const ventRef = useRef({});
+  ventRef.current = vent;
+  const targetRef = useRef({});
+  targetRef.current = target;
 
   useEffect(() => {
     const gameStartInternal = setInterval(() => {
       setGamePlayTime((currentData) => [
         ...currentData,
-        { time: time, temperature1: temperature, target: 120 },
+        {
+          time: time,
+          temperature1: temperature + Math.random() * 4,
+
+          target: targetRef.current,
+        },
       ]);
-      temperature += 1;
+      temperature =
+        (ventRef.current + 25 / 8) * 8 * 0.01 + temperature * (1 - 0.01);
       time += 1;
-      console.log(datatrend);
+
+      console.log(ventRef.current);
     }, 1000);
 
     return () => {
@@ -92,8 +105,8 @@ const Home = () => {
             <div>Loading...</div>
           ) : (
             <div>
-              <h1>Lets get Sizzlin</h1>
-              <ResponsiveContainer width="80%" height={500}>
+              <h1 className="body-header">Lets get Sizzlin</h1>
+              <ResponsiveContainer width="100%" height={500}>
                 <LineChart
                   data={datatrend}
                   margin={{
@@ -113,40 +126,53 @@ const Home = () => {
                     type="monotone"
                     dataKey="temperature1"
                     stroke="#82ca9d"
+                    strokeWidth={4}
                   />
-                  <Line type="monotone" dataKey="target" stroke="#82ca9d" />
+                  <Line
+                    type="monotone"
+                    dataKey="target"
+                    stroke="red"
+                    strokeWidth={4}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           )}
         </div>
-        <form onSubmit>
+      </div>
+      <div className="flex-row justify-center">
+        <h1 className="body-header">Vent Position</h1>
+      </div>
+      <div className="flex-row justify-center">
+        <input
+          type="range"
+          min={0}
+          max={100}
+          step={0.02}
+          value={vent}
+          onChange={(event) => {
+            setVent(event.target.valueAsNumber);
+            console.log(event.target.valueAsNumber);
+          }}
+        />
+      </div>
+      <div className="flex-row justify-center">
+        <h1 className="body-header">Target</h1>
+      </div>
+      <div className="flex-row justify-center">
+        <div className="flex-row justify-center">
           <input
-            className="form-input"
-            placeholder="Your username"
-            name="name"
-            type="text"
+            type="range"
+            min={0}
+            max={500}
+            step={0.02}
+            value={target}
+            onChange={(event) => {
+              setTarget(event.target.valueAsNumber);
+              console.log(event.target.valueAsNumber);
+            }}
           />
-          <input
-            className="form-input"
-            placeholder="Your email"
-            name="email"
-            type="email"
-          />
-          <input
-            className="form-input"
-            placeholder="******"
-            name="password"
-            type="password"
-          />
-          <button
-            className="btn btn-block btn-info"
-            style={{ cursor: "pointer" }}
-            type="submit"
-          >
-            Submit
-          </button>
-        </form>
+        </div>
       </div>
     </main>
   );
