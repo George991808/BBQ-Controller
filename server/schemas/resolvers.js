@@ -48,6 +48,13 @@ const resolvers = {
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+    firstDevice: async (parent, args, context) => {
+      if (context.user) {
+        return Device.findOne().sort({ _id: -1 }).populate("history");
+        // TODO args.deviceId
+      }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 
   Mutation: {

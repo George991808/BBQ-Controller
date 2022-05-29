@@ -44,8 +44,8 @@ function App() {
           <Header />
           <div className="container">
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/dashboard" element={<Home />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/me" element={<User />} />
               <Route path="/users/:userId" element={<User />} />

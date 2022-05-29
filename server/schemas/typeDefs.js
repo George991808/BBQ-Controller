@@ -40,6 +40,7 @@ const typeDefs = gql`
     user(userId: ID!): User
     me: User
     device(deviceId: ID!): Device
+    firstDevice: Device
   }
 
   type Mutation {

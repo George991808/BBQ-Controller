@@ -29,3 +29,27 @@ export const QUERY_ME = gql`
     }
   }
 `;
+
+export const QUERY_DEVICE = gql`
+  query device($deviceId: ID!) {
+    device(deviceId: $deviceId) {
+      name
+      history {
+        value
+        timestamp
+      }
+    }
+  }
+`;
+
+export const QUERY_FIRST_DEVICE = gql`
+  query firstDevice {
+    firstDevice {
+      name
+      history {
+        timestamp
+        value
+      }
+    }
+  }
+`;
