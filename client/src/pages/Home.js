@@ -15,8 +15,9 @@ import {
   ReferenceLine,
 } from "recharts";
 
+import Switch from "react-switch";
 import { QUERY_FIRST_DEVICE } from "../utils/queries";
-
+import ToggleSwitch from "../components/ToggleSwitch/ToggleSwitch.js";
 let dataChart = [
   {
     time: 0,
@@ -69,6 +70,7 @@ const Home = () => {
   const [target, setTarget] = useState(120);
   const [vent, setVent] = useState(0);
   const [datatrend, setGamePlayTime] = useState([]);
+  const [toggled, setToggled] = React.useState(false);
   const ventRef = useRef({});
   ventRef.current = vent;
   const targetRef = useRef({});
@@ -105,7 +107,9 @@ const Home = () => {
             <div>Loading...</div>
           ) : (
             <div>
-              <h1 className="body-header">Lets get Sizzlin</h1>
+              <h1 className="body-header flex-row  justify-center">
+                Lets get Sizzlin
+              </h1>
               <ResponsiveContainer width="100%" height={500}>
                 <LineChart
                   data={datatrend}
@@ -173,6 +177,16 @@ const Home = () => {
             }}
           />
         </div>
+      </div>
+      <div className="flex-row justify-center">
+        <span>
+          <h1 className="body-header">Manual</h1>
+        </span>{" "}
+        <ToggleSwitch />{" "}
+        <span>
+          {" "}
+          <h1 className="body-header">Automatic</h1>
+        </span>
       </div>
     </main>
   );
