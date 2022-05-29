@@ -17,6 +17,8 @@
     "concurrently": "^5.1.0"
   },
   "dependencies": {
-    "dygraphs": "^2.1.0"
+    "dygraphs": "^2.1.0",
+    "socket.io": "^4.5.1",
+    "websocket": "^1.0.34"
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 
 import {
@@ -17,54 +17,72 @@ import {
 
 import { QUERY_FIRST_DEVICE } from "../utils/queries";
 
-const dataChart = [
+let dataChart = [
   {
-    time: "14:00",
-    temperature1: 30,
+    time: 0,
+    temperature1: 0,
   },
   {
-    time: "14:10",
-    temperature1: 40,
+    time: 10,
+    temperature1: 0,
   },
   {
-    time: "14:20",
-    temperature1: 60,
+    time: 20,
+    temperature1: 0,
   },
   {
-    time: "14:30",
-    temperature1: 90,
+    time: 30,
+    temperature1: 0,
   },
   {
-    time: "14:40",
-    temperature1: 120,
+    time: 40,
+    temperature1: 0,
   },
   {
-    time: "14:50",
-    temperature1: 125,
+    time: 50,
+    temperature1: 0,
   },
   {
-    time: "15:00",
-    temperature1: 118,
+    time: 60,
+    temperature1: 0,
   },
   {
-    time: "15:10",
-    temperature1: 121,
+    time: 70,
+    temperature1: 0,
   },
   {
-    time: "15:20",
-    temperature1: 120,
+    time: 80,
+    temperature1: 0,
   },
   {
-    time: "15:30",
-    temperature1: 119,
+    time: 80,
+    temperature1: 0,
   },
 ];
 
 const Home = () => {
   const { loading, data } = useQuery(QUERY_FIRST_DEVICE);
   const firstDevice = data?.firstDevice || [];
-
+  let time = 0;
+  let temperature = 0;
   console.log("ASD", firstDevice);
+  const [datatrend, setGamePlayTime] = useState([]);
+
+  useEffect(() => {
+    const gameStartInternal = setInterval(() => {
+      setGamePlayTime((currentData) => [
+        ...currentData,
+        { time: time, temperature1: temperature, target: 120 },
+      ]);
+      temperature += 1;
+      time += 1;
+      console.log(datatrend);
+    }, 1000);
+
+    return () => {
+      clearInterval(gameStartInternal);
+    };
+  }, []);
 
   return (
     <main>
@@ -74,10 +92,10 @@ const Home = () => {
             <div>Loading...</div>
           ) : (
             <div>
-              <h1>Device Info</h1>
+              <h1>Lets get Sizzlin</h1>
               <ResponsiveContainer width="80%" height={500}>
-                <AreaChart
-                  data={dataChart}
+                <LineChart
+                  data={datatrend}
                   margin={{
                     top: 5,
                     right: 30,
@@ -90,19 +108,14 @@ const Home = () => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
+
                   <Line
-                    type="monotone"
-                    dataKey="pv"
-                    stroke="#8884d8"
-                    activeDot={{ r: 8 }}
-                  />
-                  <Area
                     type="monotone"
                     dataKey="temperature1"
                     stroke="#82ca9d"
                   />
-                  <ReferenceLine y={120} label="Target" stroke="red" />
-                </AreaChart>
+                  <Line type="monotone" dataKey="target" stroke="#82ca9d" />
+                </LineChart>
               </ResponsiveContainer>
             </div>
           )}
