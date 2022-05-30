@@ -3,8 +3,6 @@ import { useQuery } from "@apollo/client";
 
 import {
   LineChart,
-  AreaChart,
-  Area,
   Line,
   XAxis,
   YAxis,
@@ -12,31 +10,22 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts";
-import { Container, Row, Col } from "react-bootstrap/Button";
-import Switch from "react-switch";
+
 import { QUERY_FIRST_DEVICE } from "../utils/queries";
 import ToggleSwitch from "../components/ToggleSwitch/ToggleSwitch.js";
-let Controller = require("node-pid-controller");
-let ctr = new Controller({
-  k_p: 0.25,
-  k_i: 0.01,
-  k_d: 0.01,
-  dt: 1,
-});
 
 const Home = () => {
   const { loading, data } = useQuery(QUERY_FIRST_DEVICE);
-  const firstDevice = data?.firstDevice || [];
+  //const firstDevice = data?.firstDevice || [];
   let time = 0;
   let temperature = 25;
   //console.log("ASD", firstDevice);
   const [target, setTarget] = useState(120);
   const [vent, setVent] = useState(0);
-  const [mode, setMode] = useState("MAN");
+  //const [mode, setMode] = useState("MAN");
   const [datatrend, setGamePlayTime] = useState([]);
-  const [toggled, setToggled] = React.useState(false);
+  // const [toggled, setToggled] = React.useState(false);
   const ventRef = useRef({});
   ventRef.current = vent;
   const targetRef = useRef({});
