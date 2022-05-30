@@ -37,7 +37,7 @@ const Home = () => {
         ...currentData,
         {
           time: time,
-          temperature1: temperature + Math.random() * 4,
+          temperature1: temperature + (Math.random() * temperature) / 10,
 
           target: targetRef.current,
         },
