@@ -14,52 +14,17 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-
+import { Container, Row, Col } from "react-bootstrap/Button";
 import Switch from "react-switch";
 import { QUERY_FIRST_DEVICE } from "../utils/queries";
 import ToggleSwitch from "../components/ToggleSwitch/ToggleSwitch.js";
-let dataChart = [
-  {
-    time: 0,
-    temperature1: 0,
-  },
-  {
-    time: 10,
-    temperature1: 0,
-  },
-  {
-    time: 20,
-    temperature1: 0,
-  },
-  {
-    time: 30,
-    temperature1: 0,
-  },
-  {
-    time: 40,
-    temperature1: 0,
-  },
-  {
-    time: 50,
-    temperature1: 0,
-  },
-  {
-    time: 60,
-    temperature1: 0,
-  },
-  {
-    time: 70,
-    temperature1: 0,
-  },
-  {
-    time: 80,
-    temperature1: 0,
-  },
-  {
-    time: 80,
-    temperature1: 0,
-  },
-];
+let Controller = require("node-pid-controller");
+let ctr = new Controller({
+  k_p: 0.25,
+  k_i: 0.01,
+  k_d: 0.01,
+  dt: 1,
+});
 
 const Home = () => {
   const { loading, data } = useQuery(QUERY_FIRST_DEVICE);
@@ -69,6 +34,7 @@ const Home = () => {
   //console.log("ASD", firstDevice);
   const [target, setTarget] = useState(120);
   const [vent, setVent] = useState(0);
+  const [mode, setMode] = useState("MAN");
   const [datatrend, setGamePlayTime] = useState([]);
   const [toggled, setToggled] = React.useState(false);
   const ventRef = useRef({});
@@ -90,7 +56,9 @@ const Home = () => {
       temperature =
         (ventRef.current + 25 / 8) * 8 * 0.01 + temperature * (1 - 0.01);
       time += 1;
-
+      if (Math.random() < 0.03) {
+        temperature = temperature + (Math.random() - 1) * 4;
+      }
       console.log(ventRef.current);
     }, 1000);
 
@@ -144,49 +112,64 @@ const Home = () => {
           )}
         </div>
       </div>
-      <div className="flex-row justify-center">
-        <h1 className="body-header">Vent Position</h1>
-      </div>
-      <div className="flex-row justify-center">
-        <input
-          type="range"
-          min={0}
-          max={100}
-          step={0.02}
-          value={vent}
-          onChange={(event) => {
-            setVent(event.target.valueAsNumber);
-            console.log(event.target.valueAsNumber);
-          }}
-        />
-      </div>
-      <div className="flex-row justify-center">
-        <h1 className="body-header">Target</h1>
-      </div>
-      <div className="flex-row justify-center">
-        <div className="flex-row justify-center">
-          <input
-            type="range"
-            min={0}
-            max={500}
-            step={0.02}
-            value={target}
-            onChange={(event) => {
-              setTarget(event.target.valueAsNumber);
-              console.log(event.target.valueAsNumber);
-            }}
-          />
+      <div className="flex-row justify-center col-12">
+        <div className="flex-row justify-center col-12 col-md-6 ">
+          <div className="flex-row justify-center col-12">
+            <h1 className="body-header">Vent Position</h1>
+          </div>
+          <div className="flex-row justify-center col-12">
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={vent}
+              onChange={(event) => {
+                setVent(event.target.valueAsNumber);
+                console.log(event.target.valueAsNumber);
+              }}
+            />
+          </div>
+          <div className="flex-row justify-center col-12">
+            <h1 className="body-header">{vent}</h1>
+          </div>
+        </div>
+        <div className="flex-row justify-center col-12 col-md-6">
+          <div className="flex-row justify-center col-12">
+            <h1 className="body-header">Target</h1>
+          </div>
+          <div className="flex-row justify-center col-12">
+            <div className="flex-row justify-center col-12">
+              <input
+                type="range"
+                min={0}
+                max={400}
+                step={1}
+                value={target}
+                onChange={(event) => {
+                  setTarget(event.target.valueAsNumber);
+                  console.log(event.target.valueAsNumber);
+                }}
+              />
+            </div>
+            <div className="flex-row justify-center col-12">
+              <h1 className="body-header">{target}</h1>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="flex-row justify-center">
-        <span>
-          <h1 className="body-header">Manual</h1>
-        </span>{" "}
-        <ToggleSwitch />{" "}
-        <span>
-          {" "}
-          <h1 className="body-header">Automatic</h1>
-        </span>
+      <div className="flex-row justify-center col-12">
+        <div className="flex-row justify-center col-12 col-md-6">
+          <div className="flex-row justify-flex-end col-4">
+            <h1 className="body-header">Manual</h1>
+          </div>
+          <div className="flex-row justify-center col-4">
+            <ToggleSwitch />
+          </div>
+          <div className="flex-row justify-flex-start  col-4">
+            <h1 className="body-header">Automatic</h1>
+          </div>
+        </div>
       </div>
     </main>
   );

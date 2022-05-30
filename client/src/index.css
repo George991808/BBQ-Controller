@@ -1718,3 +1718,6 @@ label form [type="radio"] {
 .body-header {
   color: gray;
 }
+input[type="range"] {
+  width: 70%;
+}
